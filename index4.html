@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="MobileOptimized" content="320" />
+        <title>Hello H5+</title>
+        <!--<script type="text/javascript" src="../js/commonSelf.js"></script>-->
+        <script type="text/javascript">
+            (function(w) {
+                var openw = null,
+                    waiting = null;
+                /**
+                 * 打开新窗口
+                 * @param {URIString} id : 要打开页面url
+                 * @param {boolean} wa : 是否显示等待框
+                 * @param {boolean} ns : 是否不自动显示
+                 * @param {JSON} ws : Webview窗口属性
+                 */
+                w.clicked = function(id, wa, ns, ws) {
+                    if(openw) { //避免多次打开同一个页面
+                        return null;
+                    }
+                    if(w.plus) {
+                        wa && (waiting = plus.nativeUI.showWaiting());
+                        ws = ws || {};
+                        ws.scrollIndicator || (ws.scrollIndicator = 'none');
+                        ws.scalable || (ws.scalable = false);
+                        var pre = ''; //'http://192.168.1.178:8080/h5/';
+                        openw = plus.webview.create(pre + id, id, ws);
+                        ns || openw.addEventListener('loaded', function() { //页面加载完成后才显示
+                            //        setTimeout(function(){//延后显示可避免低端机上动画时白屏
+                            openw.show(as);
+                            closeWaiting();
+                            //        },200);
+                        }, false);
+                        openw.addEventListener('close', function() { //页面关闭后可再次打开
+                            openw = null;
+                        }, false);
+                        return openw;
+                    } else {
+                        w.open(id);
+                    }
+                    return null;
+                };
+
+                /**
+                 * 关闭等待框
+                 */
+                w.closeWaiting = function() {
+                    waiting && waiting.close();
+                    waiting = null;
+                }
+            })(window);
+        </script>
+        <script type="text/javascript">
+            function scaned(t, r, f) {
+                var d = new Date();
+                var h = d.getHours(),
+                    m = d.getMinutes(),
+                    s = d.getSeconds(),
+                    ms = d.getMilliseconds();
+                if(h < 10) {
+                    h = '0' + h;
+                }
+                if(m < 10) {
+                    m = '0' + m;
+                }
+                if(s < 10) {
+                    s = '0' + s;
+                }
+                if(ms < 10) {
+                    ms = '00' + ms;
+                } else if(ms < 100) {
+                    ms = '0' + ms;
+                }
+                var ts = '[' + h + ':' + m + ':' + s + '.' + ms + ']';
+                console.log("二维码信息-----" + r);
+                alert("二维码信息-----" + r);
+            }
+        </script>
+        <style type="text/css">
+            html {
+                width: 100%;
+                height: 100%;
+            }
+            
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                font-family: Arial;
+                font-size: 16px;
+                color: #6c6c6c;
+                -webkit-touch-callout: none;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                -webkit-text-size-adjust: none;
+            }
+            
+            .button {
+                font-size: 18px;
+                font-weight: normal;
+                text-decoration: none;
+                display: block;
+                text-align: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                color: #FFF;
+                background-color: #FFCC33;
+                border: 1px solid #ECB100;
+                padding: .5em 0em;
+                margin: .5em .7em;
+                -webkit-border-radius: 5px;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>
+            <div class="button" onclick="clicked('index3.html',true,true);">扫一扫</div>
+        </div>
+    </body>
+
+</html>
